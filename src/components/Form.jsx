@@ -1,7 +1,12 @@
+import { useState, useEffect } from 'react';
+
 function Form() {
+
+  const [name, setName] = useState("ff");
+
   return(
     <>
-      <div className="md:w-1/2 lg:w-2/5">
+      <div className="md:w-1/2 lg:w-2/5 mb-10">
         <h2 className="font-black text-3xl">Tracking Patients</h2>
         <p className="text-lg mt-5 mb-5">
           Add Patients and 
@@ -10,7 +15,7 @@ function Form() {
 
         <form 
           action=""
-          className="bg-white shadow-md rounded-lg py-10 px-5"
+          className="bg-white shadow-xl rounded-xl py-10 px-5 mt-14"
         >
           <div className="text-left mb-5">
             <label 
@@ -22,6 +27,8 @@ function Form() {
               type="text"
               placeholder="Pet's name"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
             />
           </div>
 
@@ -53,13 +60,12 @@ function Form() {
 
           <div className="text-left mb-5">
             <label 
-              htmlFor="email"
+              htmlFor="date"
               className="block font-bold text-gray-700 uppercase"
-            >Email</label>
+            >Discharge Date</label>
             <input 
-              id="email"
-              type="email"
-              placeholder="Owner's email"
+              id="date"
+              type="date"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
             />
           </div>
