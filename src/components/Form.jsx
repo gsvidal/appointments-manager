@@ -1,8 +1,51 @@
 import { useState, useEffect } from 'react';
+import Error from './Error';
 
-function Form() {
+function Form({patients, setPatients}) {
 
-  const [name, setName] = useState("ff");
+  const [petName, setPetName] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [email, setEmail] = useState("");
+  const [dischargeDate, setDischargeDate] = useState("");
+  const [symptom, setSymptom] = useState("");
+
+  const [error, setError] = useState(false);
+
+  const generateKeyId = () => {
+    const random = Math.random().toString(36).slice(2);
+    const date = Date.now().toString(36);
+    return random + date;
+  } 
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    //Form validation
+    if([petName, ownerName, email, dischargeDate, symptom].includes("")) {
+      setError(true);
+      return;
+    } 
+    setError(false);
+          
+    const newPatient = {
+      petName, 
+      ownerName, 
+      email, 
+      dischargeDate, 
+      symptom,
+      id: generateKeyId()
+    }
+
+    setPatients([...patients, newPatient])
+
+    // Restart Form
+    setPetName("");
+    setOwnerName("");
+    setEmail("");
+    setDischargeDate("");
+    setSymptom("");
+
+  }
 
   return(
     <>
@@ -14,9 +57,13 @@ function Form() {
         </p>
 
         <form 
+          onSubmit={handleSubmit}
           action=""
           className="bg-white shadow-xl rounded-xl py-10 px-5 mt-14"
         >
+          {error && 
+            <Error>Please complete all required fields</Error>
+          }
           <div className="text-left mb-5">
             <label 
               htmlFor="pet"
@@ -27,8 +74,8 @@ function Form() {
               type="text"
               placeholder="Pet's name"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
+              value={petName}
+              onChange={(event) => setPetName(event.target.value)}
             />
           </div>
 
@@ -42,6 +89,8 @@ function Form() {
               type="text"
               placeholder="Owner's name"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+              value={ownerName}
+              onChange={(event) => setOwnerName(event.target.value)}
             />
           </div>
 
@@ -55,6 +104,8 @@ function Form() {
               type="email"
               placeholder="Owner's email"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
 
@@ -67,6 +118,8 @@ function Form() {
               id="date"
               type="date"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+              value={dischargeDate}
+              onChange={(event) => setDischargeDate(event.target.value)}
             />
           </div>
 
@@ -76,19 +129,21 @@ function Form() {
               className="block font-bold text-gray-700 uppercase"
             >Symptoms</label>
             <textarea 
-              name="symptom" 
-              id="symptom" 
+              name="symptom"
+              id="symptom"
               cols="30" 
               rows="10"
               className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
               placeholder="Describe the symptoms"
+              value={symptom}
+              onChange={(event) => setSymptom(event.target.value)}
             ></textarea>
           </div>
 
           <input 
             type="submit" 
             value="Create appointment"
-            className="border-2 w-full p-2 mt-2 text-white bg-indigo-700  rounded-md"
+            className="border-2 w-full p-2 mt-2 text-white bg-indigo-700  rounded-md hover:bg-indigo-500 cursor-pointer"
           />
         </form>
       </div>
