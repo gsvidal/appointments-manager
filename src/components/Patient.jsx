@@ -1,4 +1,4 @@
-function Patient({patient}) {
+function Patient({patient, setPatientToEdit}) {
 
   return(
     <div className="m-5 bg-white shadow-xl p-8 rounded-xl text-left">
@@ -22,6 +22,7 @@ function Patient({patient}) {
         <button
           type="text"
           className="py-2 px-6 bg-indigo-700 hover:bg-indigo-500 text-white rounded-md "
+          onClick={() => setPatientToEdit(patient)}
         >
           Edit
         </button>

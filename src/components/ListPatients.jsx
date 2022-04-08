@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
 import Patient from "./Patient";
 
-function ListPatients({patients}) {
+function ListPatients({patients, setPatientToEdit}) {
+
+  useEffect(() => {
+    patients.length != 0 && console.log("new patient")
+  }, [patients]);
 
   if(patients.length === 0) {
     return(
@@ -22,6 +27,7 @@ function ListPatients({patients}) {
            <Patient 
              key={patient.id}
              patient={patient}
+             setPatientToEdit={setPatientToEdit}
            />
         )}
       </div>

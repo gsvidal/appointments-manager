@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Error from './Error';
 
-function Form({patients, setPatients}) {
+function Form({patients, setPatients, patientToEdit, setPatientToEdit}) {
 
   const [petName, setPetName] = useState("");
   const [ownerName, setOwnerName] = useState("");
@@ -10,6 +10,16 @@ function Form({patients, setPatients}) {
   const [symptom, setSymptom] = useState("");
 
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if(Object.keys(patientToEdit).length > 0) {
+      setPetName(patientToEdit.petName);
+      setOwnerName(patientToEdit.ownerName);
+      setEmail(patientToEdit.email);
+      setDischargeDate(patientToEdit.dischargeDate);
+      setSymptom(patientToEdit.symptom);
+    }
+  }, [patientToEdit]);
 
   const generateKeyId = () => {
     const random = Math.random().toString(36).slice(2);
@@ -32,12 +42,22 @@ function Form({patients, setPatients}) {
       ownerName, 
       email, 
       dischargeDate, 
-      symptom,
-      id: generateKeyId()
+      symptom
     }
 
-    setPatients([...patients, newPatient])
+    if(patientToEdit.id) {
+      // Editing appointment
+      newPatient.id = patientToEdit.id;
+      const updatedPatients = patients.map( patientState => patientState.id === patientToEdit.id ? newPatient : patientState);
+      setPatients(updatedPatients);
+      setPatientToEdit({})
 
+    } else {
+      // New Appointment
+      newPatient.id = generateKeyId()
+      setPatients([...patients, newPatient])
+    }
+    
     // Restart Form
     setPetName("");
     setOwnerName("");
@@ -142,7 +162,7 @@ function Form({patients, setPatients}) {
 
           <input 
             type="submit" 
-            value="Create appointment"
+            value={ patientToEdit.id ? "Save Edition" : "Create Appointment"}
             className="border-2 w-full p-2 mt-2 text-white bg-indigo-700  rounded-md hover:bg-indigo-500 cursor-pointer"
           />
         </form>
